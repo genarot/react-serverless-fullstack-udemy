@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyledCharacter,
   StyledGame,
@@ -8,9 +8,21 @@ import {
 import { Strong } from "../styled/Random";
 
 export default function Game() {
+  const [score, setScore] = useState<number>(0);
+
+  useEffect(() => {
+    console.warn("use effect");
+    const interval = setInterval(() => {
+      setScore((prevScore) => prevScore + 1);
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <StyledGame>
-      <StyledScore>Score:0</StyledScore>
+      <StyledScore>Score: {score}</StyledScore>
       <StyledCharacter>A</StyledCharacter>
       <StyledTimer>
         Time: <Strong>00: 000</Strong>
