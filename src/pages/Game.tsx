@@ -9,12 +9,28 @@ import { Strong } from "../styled/Random";
 
 export default function Game() {
   const [score, setScore] = useState<number>(0);
+  const MAX_SECONDS = 5;
+  const [ms, setMs] = useState(0);
+  const [seconds, setSeconds] = useState(MAX_SECONDS);
+
+  const updateTime = (startTime: Date) => {
+    const endDate = new Date();
+    const msPassedStr = (endDate.getTime() - startTime.getTime()).toString();
+    const formattedMSString = ("0000" + msPassedStr).slice(-5);
+    // 00000 - first 2 are the seconds, last 3 are the ms that have passed
+    // console.log(formattedMSString);
+    const updatedSeconds =
+      MAX_SECONDS - parseInt(formattedMSString.substring(0, 2));
+    console.log(updatedSeconds);
+  };
 
   useEffect(() => {
+    const currentTime = new Date();
     console.warn("use effect");
     const interval = setInterval(() => {
-      setScore((prevScore) => prevScore + 1);
-    }, 1000);
+      updateTime(currentTime);
+      //   setScore((prevScore) => prevScore + 1);
+    }, 1);
     return () => {
       clearInterval(interval);
     };
