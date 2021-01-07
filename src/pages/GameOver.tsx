@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 const GameOver = () => {
-    return (
-        <div>
-            <h1>GameOver</h1>
-        </div>
-    );
+  return (
+    <div>
+      <h1>GameOver</h1>
+    </div>
+  );
 };
 
 export default GameOver;

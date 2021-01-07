@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { RouteComponentProps } from "react-router-dom";
 import {
   StyledCharacter,
   StyledGame,
@@ -7,41 +8,60 @@ import {
 } from "../styled/Game";
 import { Strong } from "../styled/Random";
 
-export default function Game() {
+export default function Game({ history }: RouteComponentProps<any>) {
   const [score, setScore] = useState<number>(0);
   const MAX_SECONDS = 5;
-  const [ms, setMs] = useState(0);
-  const [seconds, setSeconds] = useState(MAX_SECONDS);
+  const [ms, setMs] = useState("0");
+  const [seconds, setSeconds] = useState(MAX_SECONDS.toString());
 
   const updateTime = (startTime: Date) => {
     const endDate = new Date();
     const msPassedStr = (endDate.getTime() - startTime.getTime()).toString();
-    const formattedMSString = ("0000" + msPassedStr).slice(-5);
+    const formattedMSString = String(msPassedStr).padStart(5, "0");
     // 00000 - first 2 are the seconds, last 3 are the ms that have passed
     // console.log(formattedMSString);
     const updatedSeconds =
       MAX_SECONDS - parseInt(formattedMSString.substring(0, 2));
-    console.log(updatedSeconds);
+    const updatedMs =
+      1000 -
+      parseInt(formattedMSString.substring(formattedMSString.length - 3));
+
+    setSeconds(addLeadingZeros(updatedSeconds, 2));
+
+    setMs(addLeadingZeros(updatedMs, 3));
   };
+
+  const addLeadingZeros = (num: number, length: number) =>
+    String(num).padStart(length, "0");
 
   useEffect(() => {
     const currentTime = new Date();
     console.warn("use effect");
     const interval = setInterval(() => {
       updateTime(currentTime);
-      //   setScore((prevScore) => prevScore + 1);
     }, 1);
     return () => {
       clearInterval(interval);
     };
   }, []);
 
+  useEffect(() => {
+    if (+seconds <= -1) {
+      console.log("/gameOver");
+
+      history.push("/gameOver");
+    }
+  }, [seconds, ms]);
+
   return (
     <StyledGame>
       <StyledScore>Score: {score}</StyledScore>
       <StyledCharacter>A</StyledCharacter>
       <StyledTimer>
-        Time: <Strong>00: 000</Strong>
+        Time:{" "}
+        <Strong>
+          {seconds}: {ms}
+        </Strong>
       </StyledTimer>
     </StyledGame>
   );
