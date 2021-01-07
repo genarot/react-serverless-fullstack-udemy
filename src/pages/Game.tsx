@@ -40,10 +40,18 @@ export default function Game({ history }: RouteComponentProps<any>) {
     const interval = setInterval(() => {
       updateTime(currentTime);
     }, 1);
+
+    document.addEventListener("keyup", keyUpHandler);
+
     return () => {
       clearInterval(interval);
+      document.removeEventListener("keyup", keyUpHandler);
     };
   }, []);
+
+  const keyUpHandler = (evt: KeyboardEvent) => {
+    console.log(evt.key);
+  };
 
   useEffect(() => {
     if (+seconds <= -1) {
