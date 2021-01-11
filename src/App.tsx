@@ -9,6 +9,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./styled/Themes";
 import UseTheme from "./hooks/UseTheme";
+import Loader from "./styled/Loader";
 
 function App() {
   const { isLoading } = useAuth0();
@@ -22,7 +23,9 @@ function App() {
         <Global />
         <Main>
           {isLoading ? (
-            <p>Loading....</p>
+            <Loader>
+              <p>Loading....</p>
+            </Loader>
           ) : (
             <Container>
               <NavBar toggleTheme={setTheme as any} />

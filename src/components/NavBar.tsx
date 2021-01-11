@@ -2,8 +2,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import UseTheme from "../hooks/UseTheme";
+import { StyledButton } from "../styled/Buttons";
 import { Accent } from "../styled/Random";
 import {
+  StyledButtonLink,
   StyledLink,
   StyledNavbar,
   StyledNavBrand,
@@ -32,22 +34,24 @@ export const NavBar = (props: Props) => {
         </li>
         {!isAuthenticated && (
           <li>
-            <button onClick={loginWithRedirect}>Login</button>
+            <StyledButtonLink onClick={loginWithRedirect}>
+              Login
+            </StyledButtonLink>
           </li>
         )}
         {isAuthenticated && (
           <li>
-            <button onClick={() => logout()}>Logout</button>
+            <StyledButtonLink onClick={() => logout()}>Logout</StyledButtonLink>
           </li>
         )}
-        <button
+        <StyledButton
           onClick={function () {
             // @ts-ignore
             props.toggleTheme();
           }}
         >
           ToggleTheme
-        </button>
+        </StyledButton>
       </StyledNavItems>
     </StyledNavbar>
   );
