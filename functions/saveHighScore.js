@@ -1,10 +1,22 @@
+const { getAccessTokenFromHeaders } = require("./utils/auth");
 const { table, getHighScores } = require("./utils/airtable");
 
 exports.handler = async (event) => {
+  console.log(event.headers, getAccessTokenFromHeaders(event.headers));
+  const token = getAccessTokenFromHeaders(event.headers);
+  if (!token) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        err: "User is not logged in.",
+      }),
+    };
+  }
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ err: "That method is not allowed" }),
+      body: JSON.stringify({ err: "That method   is not allowed" }),
     };
   }
   const { score, name } = JSON.parse(event.body);

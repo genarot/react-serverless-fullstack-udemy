@@ -26,7 +26,7 @@ const GameOver = ({ history }: any) => {
             score,
           }),
           headers: {
-            Authorizacion: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         };
         const res = await fetch(".netlify/functions/saveHighScore", options);
