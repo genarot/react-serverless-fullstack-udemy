@@ -16,31 +16,31 @@ const GameOver = ({ history }: any) => {
 
   useEffect(() => {
     const saveHighScore = async () => {
-      // if (score > 0) {
-      try {
-        const token = await getAccessTokenSilently();
-        const options = {
-          method: "POST",
-          body: JSON.stringify({
-            name: "James" + Math.ceil(Math.random() * 56),
-            score,
-          }),
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const res = await fetch(".netlify/functions/saveHighScore", options);
-        const data = await res.json();
-        if (data.id) {
-          setscoreMessage("Congrats! you got a high score!");
-        } else {
-          setscoreMessage("Sorry, not a high score. keep trying!!");
+      if (score > 0) {
+        try {
+          const token = await getAccessTokenSilently();
+          const options = {
+            method: "POST",
+            body: JSON.stringify({
+              name: "James" + Math.ceil(Math.random() * 56),
+              score,
+            }),
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+          const res = await fetch(".netlify/functions/saveHighScore", options);
+          const data = await res.json();
+          if (data.id) {
+            setscoreMessage("Congrats! you got a high score!");
+          } else {
+            setscoreMessage("Sorry, not a high score. keep trying!!");
+          }
+          console.log(data);
+        } catch (err) {
+          console.error(err);
         }
-        console.log(data);
-      } catch (err) {
-        console.error(err);
       }
-      // }
     };
     if (isAuthenticated) {
       saveHighScore();

@@ -1,14 +1,20 @@
-const { getAccessTokenFromHeaders } = require("./utils/auth");
+const {
+  getAccessTokenFromHeaders,
+  validateAccessToken,
+} = require("./utils/auth");
 const { table, getHighScores } = require("./utils/airtable");
 
 exports.handler = async (event) => {
-  console.log(event.headers, getAccessTokenFromHeaders(event.headers));
+  console.log(getAccessTokenFromHeaders(event.headers));
   const token = getAccessTokenFromHeaders(event.headers);
-  if (!token) {
+
+  const user = await validateAccessToken(token);
+
+  if (!user) {
     return {
       statusCode: 401,
       body: JSON.stringify({
-        err: "User is not logged in.",
+        err: "User is not authorizated",
       }),
     };
   }
@@ -19,7 +25,8 @@ exports.handler = async (event) => {
       body: JSON.stringify({ err: "That method   is not allowed" }),
     };
   }
-  const { score, name } = JSON.parse(event.body);
+  const name = user["https://learnbuildtype/username"];
+  const { score } = JSON.parse(event.body);
 
   if (typeof score === "undefined" || !name) {
     return {
