@@ -1,4 +1,6 @@
-require("dotenv").config({});
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config({});
+}
 const AirTable = require("airtable");
 
 const API_KEY = process.env.AIRTABLE_API_KEY;
